@@ -734,7 +734,6 @@ int main(int argc, char* argv[]) {
     uds_file << endl;
     wds_file << endl;
     rw_file << endl;
-    cerr << endl;
   }
   exact_file.close();
   ub_file.close();
