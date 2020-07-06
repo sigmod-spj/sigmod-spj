@@ -510,7 +510,7 @@ int main(int argc, char* argv[]) {
   unsigned int n = round(0.01 * N);
   cout << "SAMPLE SIZE: " << n << endl;
 
-    // Solve for WDS parameters
+  // Solve for WDS parameters
   unsigned int M; // Number of 1's
   unordered_map<unsigned int, double> p_i; // Prob of each value
   duration<double> time_span_solve = solve(data, D, n, M, p_i);
@@ -651,6 +651,7 @@ int main(int argc, char* argv[]) {
 
       time_file << time_span_uds.count() << '\t'
                 << time_span_wds.count() << '\t'
+                << time_span_histo.count() << '\t'
                 << time_span_exact.count() << '\t' << endl;
 
       exact_file << filtered_distinct_count << '\t';
