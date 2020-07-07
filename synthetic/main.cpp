@@ -20,36 +20,35 @@ typedef std::vector<std::tuple<unsigned int, unsigned int> > RELATION_TYPE;
 using namespace std;
 using namespace std::chrono;
 
-/** Filter 1
-
-template <class K, class... V>
-bool tuple_filter(const tuple<K, V...>& t, unsigned int i, unsigned seed) {
-  // double p[] = {0.001,0.0015,0.002,0.0025,0.003,0.0035,0.004,0.0045,0.005};
-  // double p[] = {0.0008, 0.00085, 0.0009, 0.00095, 0.001, 0.00105, 0.0011, 0.00115, 0.0012};
-  double p[] = {0.0006, 0.0008, 0.001, 0.0012, 0.0014};
-  return (double_hasher(i)(get<0>(t) + get<1>(t) * seed)) <= p[i];
-}
+/**
+ * 3 Filters for synthetic datasets
+ * Uncomment the appropriate one before compiling
  */
 
+/** Filter 1 **/
 /**
- * Filter 2
-
- template <class K, class... V>
- bool tuple_filter(const tuple<K, V...>& t, unsigned int i, unsigned seed) {
- double p = 0.5;
- int tau_k[] = {1,2,3,4,5,6,7,8,9};
- return (double_hasher(i)(get<0>(t)) <= p) && (get<1>(t) <= tau_k[i]);
- }
-*/
-
-/**
- * Filter 3
+ * template <class K, class... V>
+ * bool tuple_filter(const tuple<K, V...>& t, unsigned int i, unsigned seed) {
+ *   double p[] = {0.0006, 0.0008, 0.001, 0.0012, 0.0014};
+ *   return (double_hasher(i)(get<0>(t) + get<1>(t) * seed)) <= p[i];
+ * }
  */
+
+/** Filter 2 **/
+/**
+ * template <class K, class... V>
+ * bool tuple_filter(const tuple<K, V...>& t, unsigned int i, unsigned seed) {
+ *   double p = 0.5;
+ *   int tau_k[] = {1,2,3,4,5,6,7,8,9};
+ *   return (double_hasher(i)(get<0>(t)) <= p) && (get<1>(t) <= tau_k[i]);
+ * }
+ */
+
+/** Filter 3 **/
  template <class K, class... V>
  bool tuple_filter(const tuple<K, V...>& t, unsigned int i, unsigned seed) {
- // freq = [100, 137, 175, 212, 250, 287, 325, 362, 400]
- double tau_k[] = {759, 568, 456, 382, 330, 290, 260, 235, 215};
- return (get<0>(t)<=tau_k[i]) && (get<1>(t) <= 1);
+   double tau_k[] = {759, 568, 456, 382, 330, 290, 260, 235, 215};
+   return (get<0>(t)<=tau_k[i]) && (get<1>(t) <= 1);
  }
 
 
@@ -493,8 +492,7 @@ int main(int argc, char* argv[]) {
 
   /**
    * Each file will contain 30 lines, each line is an independent trial
-   * Each trial will contain 9 values for the 9 parameters of each filter filter
-   * B1 B2 B3 B4 B5 B6 (*30)
+   * Each trial will contain 5 values for the 5 parameters of each filter filter
    */
 
   ofstream uds_file;
@@ -590,12 +588,14 @@ int main(int argc, char* argv[]) {
         }
         Ra_filtered.clear();
       }
-      // wds_estimator = wds_estimator + (D - M)/2.0;
+      /* The algorithm ignores D-M values, where the best estimator for them is (D-M)/2 */
+      wds_estimator = wds_estimator + (D - M)/2.0;
       end = high_resolution_clock::now();
 
       duration<double> time_span_wds = duration_cast<duration<double>>(end - start);
 
       ////////////////////////////// HISTO Estimate //////////////////////////////
+      
       start = high_resolution_clock::now();
       double histo_estimator = 0.0;
       for (auto it = histo_sketch.cbegin(); it != histo_sketch.cend(); ++it) {
@@ -610,7 +610,6 @@ int main(int argc, char* argv[]) {
       end = high_resolution_clock::now();
 
       duration<double> time_span_histo = duration_cast<duration<double>>(end - start);
-
 
       ////////////////////////////// Exact //////////////////////////////
 
