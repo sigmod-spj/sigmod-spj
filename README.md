@@ -1,6 +1,7 @@
 # sigmod-spj
 
-`spj-full.pdf` is the full version of the paper that contains all proofs.
+`spj-full.pdf` is the full version of the paper that contains all proofs and SQL's.
+==It has been updated for revision.==
 
 - Synthetic: Experiments for synthetic datasets (uniform and zipf)
 - Benchmark: Experiments for benchmark datasets (TPCDS Q28 and Q54)
